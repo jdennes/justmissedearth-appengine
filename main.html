@@ -9,8 +9,12 @@
 <body>
   <div id="container">
     <h1>just missed earth</h1>
-    <div>Keeping track of all those objects flying around in space which narrowly miss our beautiful planet 
-      (by scraping data from <a href="http://neo.jpl.nasa.gov/">NASA</a>).</div>
+    <p>Keeping track of all those objects flying around in space which narrowly miss our beautiful planet 
+      (by scraping data from <a href="http://neo.jpl.nasa.gov/">NASA</a>).</p>
+    <p>Created on <a href="http://code.google.com/appengine/">Google App Engine</a> by
+      <a href="http://jdennes.github.com/">James Dennes</a> out of pure curiosity. 
+      Code available on <a href="http://github.com/jdennes/justmissedearth-appengine">GitHub</a>.
+      Follow <a href="http://twitter.com/justmissedearth">@justmissedearth</a> for updates.</p>
     <div id="misses-container">
     {% if close_approaches %}
     <ul id="misses">
@@ -27,8 +31,7 @@
       <div>Sorry, no near misses to display right now.</div>
     {% endif %}
     </div>
-    <div id="footer">Created by <a href="http://jdennes.github.com/">James Dennes</a> out of pure curiosity. 
-      Follow <a href="http://twitter.com/justmissedearth">@justmissedearth</a> for updates.</div>
+    <div id="footer"></div>
   </div>
 </body>
 </html>
