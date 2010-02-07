@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>just missed earth</title>
+	<link rel="stylesheet" href="/css/jme.css" type="text/css" media="screen" />
+</head>
+<body>
+  <div id="container">
+    <h1>just missed earth</h1>
+    <div>Keeping track of all those objects flying around in space which narrowly miss our beautiful planet 
+      (by scraping data from <a href="http://neo.jpl.nasa.gov/">NASA</a>).</div>
+    <div id="misses-container">
+    {% if close_approaches %}
+    <ul id="misses">
+      {% for ca in close_approaches %}
+      <li>
+        At <span class="detail date">{{ca.approach_date}}</span> an object named <span class="detail name">{{ca.object_name}}</span> 
+        with a diameter of <span class="detail diameter">{{ca.estimated_diameter}} metres</span> <span class="justmissedearth">just missed earth</span>
+        by <span class="detail distance">{{ca.minimum_distance_away}} kilometres</span>, travelling at 
+        <span class="detail speed">{{ca.relative_velocity}} kilometres per second</span>!
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <div>Sorry, no near misses to display right now.</div>
+    {% endif %}
+    </div>
+    <div id="footer">Created by <a href="http://jdennes.github.com/">James Dennes</a> out of pure curiosity. 
+      Follow <a href="http://twitter.com/justmissedearth">@justmissedearth</a> for updates.</div>
+  </div>
+</body>
+</html>

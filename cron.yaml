@@ -1,0 +1,5 @@
+cron:
+- description: Scrape NASA data and consolidate locally
+  url: /scrape
+  schedule: every day 09:00
+  timezone: Australia/NSW

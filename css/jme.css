@@ -1,0 +1,42 @@
+body {
+  font-size: 16px;
+  color: #5c5c5c;
+  background-color: #111111;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+a:link, a:visited { color: #3D3D3D  ; text-decoration: underline; }
+a:hover, a:focus { text-decoration: none; background: #231F1F; color: #ffffff; }
+p { margin: 0; }
+div#container {
+  margin: 0 auto;
+  width: 960px;
+  padding: 16px;
+  overflow: hidden;
+  position: relative;
+}
+h1 {
+  color: #2FC2EF;
+  font-size: 60px;
+  letter-spacing: -1px;
+  margin: 0 0 .25em 0;
+}
+div#misses-container {
+  font-size: 28px;
+  margin: .5em 0 .5em 0;
+}
+span.detail {
+  color: #e7e13a;
+  background: #231f1f;
+  font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
+  white-space: pre;
+}
+span.justmissedearth { color: #2FC2EF; }
+ul#misses {
+  list-style: none;
+  margin: 1em 0 1em 0;
+  padding: 0;
+}
+ul#misses li {
+  margin: .25em 0 .75em 0;
+}
