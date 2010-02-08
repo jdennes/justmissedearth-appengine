@@ -9,3 +9,7 @@ handlers:
 
 - url: .*
   script: main.py
+
+- url: /markastweeted
+  script: main.py
+  login: admin

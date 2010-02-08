@@ -136,3 +136,28 @@ class ScrapeHandler(webapp.RequestHandler):
     if result:
       return result.approach_date
     return None
+
+class MarkAsTweetedHandler(webapp.RequestHandler):
+  def get(self):
+    self.response.out.write("""
+      <html>
+        <body>
+          <form action="/markastweeted" method="post">
+            Mark any close approaches with an approach date less than (yyyy-mm-dd hh:mm):
+            <div><input type="text" name="boundary" /></div>
+            as tweeted at (yyyy-mm-dd hh:mm):
+            <div><input type="text" name="tweet_date" /></div>
+            <div><input type="submit" value="Go." /></div>
+          </form>
+        </body>
+      </html>""")
+
+  def post(self):
+    boundary = datetime.strptime(self.request.get('boundary'), '%Y-%m-%d %H:%M')
+    tweet_date = datetime.strptime(self.request.get('tweet_date'), '%Y-%m-%d %H:%M')
+    query ='SELECT * FROM CloseApproach WHERE approach_date < :boundary AND date_tweeted = NULL'
+    data = db.GqlQuery(query, boundary = boundary)
+    for ca in data:
+      ca.date_tweeted = tweet_date
+      ca.put()
+    self.response.out.write('Updated %d CloseApproach entities as tweeted at %s' % (data.count(), tweet_date))

@@ -5,10 +5,13 @@ from google.appengine.ext.webapp import util
 
 from handlers import MainHandler
 from handlers import ScrapeHandler
+from handlers import MarkAsTweetedHandler
 
 def main():
   application = webapp.WSGIApplication(
-    [('/', MainHandler), ('/scrape', ScrapeHandler)], debug=True)
+    [('/', MainHandler), 
+    ('/scrape', ScrapeHandler),
+    ('/markastweeted', MarkAsTweetedHandler)], debug=True)
   util.run_wsgi_app(application)
 
 if __name__ == '__main__':
