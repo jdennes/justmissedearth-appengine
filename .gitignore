@@ -1,2 +1,4 @@
 *.pyc
 img
+config_values.py
+
