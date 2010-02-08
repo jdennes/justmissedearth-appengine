@@ -13,6 +13,7 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
 from models import CloseApproach
+from tweeter import Tweeter
 
 class MainHandler(webapp.RequestHandler):
 
@@ -34,8 +35,16 @@ class ScrapeHandler(webapp.RequestHandler):
     self.response.out.write('Consolidation started. <br />')
     self.consolidate()
     self.response.out.write('Consolidation finished. <br />')
-    
-    # TODO: Add tweeting as @justmissedearth
+    self.response.out.write('Tweeting started. <br />')
+    data = self.get_data_to_tweet()
+    t = Tweeter(data)
+    t.tweet()
+    for ca in data:
+      ca.date_tweeted = datetime.now()
+      db.put(ca)
+      self.response.out.write('Tweeted close approach of object %s and saved date tweeted as %s<br />' % (ca.object_name, ca.date_tweeted))
+    self.response.out.write('Successully tweeted %d close approaches. <br />' % len(t.data_to_tweet))
+    self.response.out.write('Tweeting finished. <br />')
 
   """
   Utility function to convert Absolute Magnitude to Diameter in metres for Minor Planets
@@ -136,6 +145,11 @@ class ScrapeHandler(webapp.RequestHandler):
     if result:
       return result.approach_date
     return None
+
+  def get_data_to_tweet(self):
+    # Only tweet data which hasn't yet been tweeted
+    query = 'SELECT * FROM CloseApproach WHERE date_tweeted = NULL ORDER BY approach_date ASC'
+    return db.GqlQuery(query).fetch(1000)
 
 class MarkAsTweetedHandler(webapp.RequestHandler):
   def get(self):
