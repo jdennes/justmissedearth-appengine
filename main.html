@@ -24,6 +24,7 @@
         with a diameter of <span class="detail diameter">{{ca.estimated_diameter}} metres</span> <span class="justmissedearth">just missed earth</span>
         by <span class="detail distance">{{ca.minimum_distance_away}} kilometres</span>, travelling at 
         <span class="detail speed">{{ca.relative_velocity}} kilometres per second</span>!
+        <span class="miss-permalink"><a href="/misses/{{ ca.key }}">permalink</a></span>
       </li>
       {% endfor %}
     </ul>

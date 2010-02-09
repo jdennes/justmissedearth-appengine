@@ -16,18 +16,32 @@ from models import CloseApproach
 from tweeter import Tweeter
 
 class MainHandler(webapp.RequestHandler):
-
   def get(self):
     query = CloseApproach.all().order('-approach_date')
     close_approaches = query.fetch(20)
-    values = {
-      'close_approaches': close_approaches
-    }
+    values = { 'close_approaches': close_approaches }
     path = os.path.join(os.path.dirname(__file__), 'main.html')
+    self.response.out.write(template.render(path, values))
+    
+class CloseApproachDetailHandler(webapp.RequestHandler):
+  def get(self, approach_id = None):
+    try:
+      ca = CloseApproach.get(approach_id)
+      values = { 'ca': ca }
+      path = os.path.join(os.path.dirname(__file__), 'miss.html')
+      self.response.out.write(template.render(path, values))
+    except:
+      self.redirect('/')
+
+class RssHandler(webapp.RequestHandler):
+  def get(self):
+    query = CloseApproach.all().order('-approach_date')
+    close_approaches = query.fetch(20)
+    values = { 'close_approaches': close_approaches }
+    path = os.path.join(os.path.dirname(__file__), 'rss.html')
     self.response.out.write(template.render(path, values))
 
 class ScrapeHandler(webapp.RequestHandler):
-  
   data_url = "http://neo.jpl.nasa.gov/cgi-bin/neo_ca?type=NEO&hmax=all&sort=date&sdir=DESC&tlim=recent_past&dmax=10LD&max_rows=20&action=Display+Table&show=1"
   data_pattern = r'<font size="-1" face="courier, monospace">(.*)</font>'
 
