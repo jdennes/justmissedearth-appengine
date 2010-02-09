@@ -33,12 +33,12 @@ class CloseApproachDetailHandler(webapp.RequestHandler):
     except:
       self.redirect('/')
 
-class RssHandler(webapp.RequestHandler):
+class FeedHandler(webapp.RequestHandler):
   def get(self):
     query = CloseApproach.all().order('-approach_date')
     close_approaches = query.fetch(20)
     values = { 'close_approaches': close_approaches }
-    path = os.path.join(os.path.dirname(__file__), 'rss.html')
+    path = os.path.join(os.path.dirname(__file__), 'feed.html')
     self.response.out.write(template.render(path, values))
 
 class ScrapeHandler(webapp.RequestHandler):

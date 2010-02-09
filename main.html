@@ -8,23 +8,25 @@
 </head>
 <body>
   <div id="container">
-    <h1>just missed earth</h1>
-    <p>Keeping track of all those objects flying around in space which narrowly miss our beautiful planet 
-      (by scraping data from <a href="http://neo.jpl.nasa.gov/">NASA</a>).</p>
-    <p>Created on <a href="http://code.google.com/appengine/">Google App Engine</a> by
-      <a href="http://jdennes.github.com/">James Dennes</a> out of pure curiosity. 
-      Code available on <a href="http://github.com/jdennes/justmissedearth-appengine">GitHub</a>.
-      Follow <a href="http://twitter.com/justmissedearth">@justmissedearth</a> for updates.</p>
+    <div id="header">
+      <div id="header-accessories">
+        <p>Tracking all those objects flying around in space which just miss earth
+          (by scraping data from <a href="http://neo.jpl.nasa.gov/">NASA</a>).</p>
+        <p>Follow <a href="http://twitter.com/justmissedearth">@justmissedearth</a> or 
+          get the <a href="/feed">feed</a> for updates.</p>
+      </div>
+      <div id="header-title"><a href="/">just missed earth</a></div>
+    </div>
+    <h1>These objects just missed earth...</h1>
     <div id="misses-container">
     {% if close_approaches %}
     <ul id="misses">
       {% for ca in close_approaches %}
       <li>
-        At <span class="detail date">{{ca.approach_date}}</span> an object named <span class="detail name">{{ca.object_name}}</span> 
-        with a diameter of <span class="detail diameter">{{ca.estimated_diameter}} metres</span> <span class="justmissedearth">just missed earth</span>
-        by <span class="detail distance">{{ca.minimum_distance_away}} kilometres</span>, travelling at 
-        <span class="detail speed">{{ca.relative_velocity}} kilometres per second</span>!
-        <span class="miss-permalink"><a href="/misses/{{ ca.key }}">permalink</a></span>
+        At <span class="detail">{{ca.approach_date}}</span> an object named <span class="detail">{{ca.object_name}}</span> 
+        with a diameter of <span class="detail">{{ca.estimated_diameter}} metres</span> <span class="justmissedearth">just missed earth</span>
+        by <span class="detail">{{ca.minimum_distance_away}} kilometres</span>!
+        <span class="miss-permalink"><a href="/misses/{{ ca.key }}">details</a></span>
       </li>
       {% endfor %}
     </ul>
@@ -32,7 +34,11 @@
       <div>Sorry, no near misses to display right now.</div>
     {% endif %}
     </div>
-    <div id="footer"></div>
+    <div id="footer">
+      Created on <a href="http://code.google.com/appengine/">Google App Engine</a> by
+      <a href="http://jdennes.github.com/">James Dennes</a> out of pure curiosity.
+      Code available on <a href="http://github.com/jdennes/justmissedearth-appengine">GitHub</a>.
+    </div>
   </div>
 </body>
 </html>
