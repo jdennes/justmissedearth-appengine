@@ -18,8 +18,9 @@ from tweeter import Tweeter
 class MainHandler(webapp.RequestHandler):
   def get(self):
     query = CloseApproach.all().order('-approach_date')
-    close_approaches = query.fetch(20)
-    values = { 'close_approaches': close_approaches }
+    fetch_count = 20
+    close_approaches = query.fetch(fetch_count)
+    values = { 'close_approaches': close_approaches, 'fetch_count': fetch_count }
     path = os.path.join(os.path.dirname(__file__), 'main.html')
     self.response.out.write(template.render(path, values))
     
