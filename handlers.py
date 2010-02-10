@@ -59,11 +59,10 @@ class FeedHandler(webapp.RequestHandler):
 
   def _render_feed_description(self, ca):
     items = []
-    dets = [ { 'Official Name': ca.object_name }, 
-             { 'Approach Time': '%s UTC' % ca.approach_date },
+    dets = [ { 'Official Name': ca.object_name }, { 'Approach Time': '%s UTC' % ca.approach_date },
              { 'Estimated Diameter': '%d metres' % ca.estimated_diameter }, 
              { 'Missed by': '%d kilometres' % ca.minimum_distance_away },
-             { 'Travelling at': '%d kilometres per second' % ca.relative_velocity }, ]
+             { 'Travelling at': '%s kilometres per second' % str(ca.relative_velocity) }, ]
     for d in dets:
         for k, v in d.items():
           items.append('<div><em>%s:</em> %s</div>' % (k, v))
