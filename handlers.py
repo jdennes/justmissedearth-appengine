@@ -65,7 +65,7 @@ class FeedHandler(webapp.RequestHandler):
              { 'Travelling at': '%s kilometres per second' % str(ca.relative_velocity) }, ]
     for d in dets:
         for k, v in d.items():
-          items.append('<div><em>%s:</em> %s</div>' % (k, v))
+          items.append('<div>%s: %s</div>' % (k, v))
     return ''.join(items)
 
 class ScrapeHandler(webapp.RequestHandler):

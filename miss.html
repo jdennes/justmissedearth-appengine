@@ -4,10 +4,10 @@
 {% block content %}
 <h1>"{{ca.object_name}}" just missed earth...</h1>
 <div id="miss-detail-container">
-  <p>Official Name: <span class="detail">{{ca.object_name}}</span></p>
-  <p>Approach Time: <span class="detail">{{ca.approach_date}} UTC</span></p>
-  <p>Estimated Diamater: <span class="detail">{{ca.estimated_diameter}} metres</span></p>
-  <p>Missed by: <span class="detail">{{ca.minimum_distance_away}} kilometres</span></p>
-  <p>Travelling at: <span class="detail">{{ca.relative_velocity}} kilometres per second</span></p>
+  <div class="miss-attribute">Official Name:</div><div class="miss-value">{{ca.object_name}}</div>
+  <div class="miss-attribute">Approach Time:</div><div class="miss-value">{{ca.approach_date}} UTC</div>
+  <div class="miss-attribute">Estimated Diamater:</div><div class="miss-value">{{ca.estimated_diameter}} metres</div>
+  <div class="miss-attribute">Missed by:</div><div class="miss-value">{{ca.minimum_distance_away}} kilometres</div>
+  <div class="miss-attribute">Travelling at:</div><div class="miss-value">{{ca.relative_velocity}} kilometres per second</div>
 </div>
 {% endblock %}
