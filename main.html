@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% block feed %}<link rel="alternate" type="application/rss+xml" title="RSS 2.0 Latest Misses" href="/feed" />{% endblock %}
 {% block content %}
 <h1>The last {{fetch_count}} objects to just miss earth...</h1>
 <div id="misses-container">

@@ -4,7 +4,6 @@ import traceback
 import re
 import math
 import urllib, urllib2
-from BeautifulSoup import BeautifulSoup
 from datetime import datetime, date, time
 
 from google.appengine.ext import db
@@ -12,6 +11,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 
+from BeautifulSoup import BeautifulSoup
+import PyRSS2Gen
 from models import CloseApproach
 from tweeter import Tweeter
 
@@ -38,9 +39,23 @@ class FeedHandler(webapp.RequestHandler):
   def get(self):
     query = CloseApproach.all().order('-approach_date')
     close_approaches = query.fetch(20)
-    values = { 'close_approaches': close_approaches }
-    path = os.path.join(os.path.dirname(__file__), 'feed.html')
-    self.response.out.write(template.render(path, values))
+    feed_items = []
+    base_url = 'http://justmissedearth.appspot.com' # TODO: Clean this up
+    for ca in close_approaches:
+      feed_items.append(PyRSS2Gen.RSSItem(
+        title = '"%s" just missed earth...' % ca.object_name,
+        link = '%s/misses/%s' % (base_url, ca.key()),
+        description = '"%s" just missed earth...' % ca.object_name,
+        guid = PyRSS2Gen.Guid('%s/misses/%s' % (base_url, ca.key())),
+        pubDate = ca.date_added))
+    rss = PyRSS2Gen.RSS2(
+      title = "just missed earth - latest misses",
+      link = "%s/feed" % base_url,
+      description = "just missed earth - latest misses",
+      lastBuildDate = datetime.now(),
+      items = feed_items)
+    self.response.headers['Content-Type'] = 'application/rss+xml'
+    self.response.out.write(rss.to_xml(encoding = 'utf-8'))
 
 class ScrapeHandler(webapp.RequestHandler):
   data_url = "http://neo.jpl.nasa.gov/cgi-bin/neo_ca?type=NEO&hmax=all&sort=date&sdir=DESC&tlim=recent_past&dmax=10LD&max_rows=20&action=Display+Table&show=1"
