@@ -45,9 +45,9 @@ class FeedHandler(webapp.RequestHandler):
       feed_items.append(PyRSS2Gen.RSSItem(
         title = '"%s" just missed earth...' % ca.object_name,
         link = '%s/misses/%s' % (base_url, ca.key()),
-        description = '"%s" just missed earth...' % ca.object_name,
+        description = self._render_feed_description(ca),
         guid = PyRSS2Gen.Guid('%s/misses/%s' % (base_url, ca.key())),
-        pubDate = ca.date_added))
+        pubDate = ca.approach_date))
     rss = PyRSS2Gen.RSS2(
       title = "just missed earth - latest misses",
       link = "%s/feed" % base_url,
@@ -56,6 +56,18 @@ class FeedHandler(webapp.RequestHandler):
       items = feed_items)
     self.response.headers['Content-Type'] = 'application/rss+xml'
     self.response.out.write(rss.to_xml(encoding = 'utf-8'))
+
+  def _render_feed_description(self, ca):
+    items = []
+    dets = [ { 'Official Name': ca.object_name }, 
+             { 'Approach Time': '%s UTC' % ca.approach_date },
+             { 'Estimated Diameter': '%d metres' % ca.estimated_diameter }, 
+             { 'Missed by': '%d kilometres' % ca.minimum_distance_away },
+             { 'Travelling at': '%d kilometres per second' % ca.relative_velocity }, ]
+    for d in dets:
+        for k, v in d.items():
+          items.append('<div><em>%s:</em> %s</div>' % (k, v))
+    return ''.join(items)
 
 class ScrapeHandler(webapp.RequestHandler):
   data_url = "http://neo.jpl.nasa.gov/cgi-bin/neo_ca?type=NEO&hmax=all&sort=date&sdir=DESC&tlim=recent_past&dmax=10LD&max_rows=20&action=Display+Table&show=1"
