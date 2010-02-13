@@ -15,6 +15,7 @@ from BeautifulSoup import BeautifulSoup
 import PyRSS2Gen
 from models import CloseApproach
 from tweeter import Tweeter
+import config_values
 
 class MainHandler(webapp.RequestHandler):
   def get(self):
@@ -76,16 +77,19 @@ class ScrapeHandler(webapp.RequestHandler):
     self.response.out.write('Consolidation started. <br />')
     self.consolidate()
     self.response.out.write('Consolidation finished. <br />')
-    self.response.out.write('Tweeting started. <br />')
-    data = self.get_data_to_tweet()
-    t = Tweeter(data)
-    t.tweet()
-    for ca in data:
-      ca.date_tweeted = datetime.now()
-      db.put(ca)
-      self.response.out.write('Tweeted close approach of object %s and saved date tweeted as %s<br />' % (ca.object_name, ca.date_tweeted))
-    self.response.out.write('Successully tweeted %d close approaches. <br />' % len(t.data_to_tweet))
-    self.response.out.write('Tweeting finished. <br />')
+    if config_values.tweeting_enabled == True:
+      self.response.out.write('Tweeting started. <br />')
+      data = self.get_data_to_tweet()
+      t = Tweeter(data)
+      t.tweet()
+      for ca in data:
+        ca.date_tweeted = datetime.now()
+        db.put(ca)
+        self.response.out.write('Tweeted close approach of object %s and saved date tweeted as %s<br />' % (ca.object_name, ca.date_tweeted))
+      self.response.out.write('Successully tweeted %d close approaches. <br />' % len(t.data_to_tweet))
+      self.response.out.write('Tweeting finished. <br />')
+    else:
+      self.response.out.write('Tweeting is disabled. <br />')
 
   """
   Utility function to convert Absolute Magnitude to Diameter in metres for Minor Planets
@@ -191,28 +195,3 @@ class ScrapeHandler(webapp.RequestHandler):
     # Only tweet data which hasn't yet been tweeted
     query = 'SELECT * FROM CloseApproach WHERE date_tweeted = NULL ORDER BY approach_date ASC'
     return db.GqlQuery(query).fetch(1000)
-
-class MarkAsTweetedHandler(webapp.RequestHandler):
-  def get(self):
-    self.response.out.write("""
-      <html>
-        <body>
-          <form action="/markastweeted" method="post">
-            Mark any close approaches with an approach date less than (yyyy-mm-dd hh:mm):
-            <div><input type="text" name="boundary" /></div>
-            as tweeted at (yyyy-mm-dd hh:mm):
-            <div><input type="text" name="tweet_date" /></div>
-            <div><input type="submit" value="Go." /></div>
-          </form>
-        </body>
-      </html>""")
-
-  def post(self):
-    boundary = datetime.strptime(self.request.get('boundary'), '%Y-%m-%d %H:%M')
-    tweet_date = datetime.strptime(self.request.get('tweet_date'), '%Y-%m-%d %H:%M')
-    query ='SELECT * FROM CloseApproach WHERE approach_date < :boundary AND date_tweeted = NULL'
-    data = db.GqlQuery(query, boundary = boundary)
-    for ca in data:
-      ca.date_tweeted = tweet_date
-      ca.put()
-    self.response.out.write('Updated %d CloseApproach entities as tweeted at %s' % (data.count(), tweet_date))

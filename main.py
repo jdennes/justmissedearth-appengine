@@ -7,7 +7,10 @@ from handlers import MainHandler
 from handlers import CloseApproachDetailHandler
 from handlers import FeedHandler
 from handlers import ScrapeHandler
-from handlers import MarkAsTweetedHandler
+
+# Utility handlers
+from utilityhandlers import MarkAsTweetedHandler
+from utilityhandlers import LoadHistoricalHandler
 
 def main():
   application = webapp.WSGIApplication(
@@ -16,7 +19,8 @@ def main():
     ('/misses/(.*)', CloseApproachDetailHandler),
     ('/feed', FeedHandler),
     ('/scrape', ScrapeHandler),
-    ('/markastweeted', MarkAsTweetedHandler)], debug=True)
+    ('/markastweeted', MarkAsTweetedHandler),
+    ('/loadhistorical', LoadHistoricalHandler)], debug=True)
   util.run_wsgi_app(application)
 
 if __name__ == '__main__':

@@ -17,3 +17,7 @@ handlers:
 - url: /markastweeted
   script: main.py
   login: admin
+
+- url: /loadhistorical
+  script: main.py
+  login: admin
