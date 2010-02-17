@@ -38,7 +38,6 @@ class MarkAsTweetedHandler(webapp.RequestHandler):
     self.response.out.write('Updated %d CloseApproach entities as tweeted at %s' % (data.count(), tweet_date))
 
 class LoadHistoricalHandler(webapp.RequestHandler):
-  plus_minus_char = unichr(177).encode('latin-1')
   data_file = 'data/full-history-20100212.html'
 
   def get(self):
