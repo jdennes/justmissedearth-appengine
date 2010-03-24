@@ -101,19 +101,6 @@ class ScrapeHandler(webapp.RequestHandler):
     return d
 
   """
-  Utility function to format exception info
-  """
-  def format_exception(self, maxTBlevel = 5):
-    cla, exc, trbk = sys.exc_info()
-    excName = cla.__name__
-    try:
-      excArgs = exc.__dict__["args"]
-    except KeyError:
-      excArgs = "<no args>"
-    excTb = traceback.format_tb(trbk, maxTBlevel)
-    return (excName, excArgs, excTb)
-
-  """
   Consolidates the local data store so that it is up-to-date with the latest
   data from NASA
   """
@@ -141,18 +128,16 @@ class ScrapeHandler(webapp.RequestHandler):
   """
   def retrieve_past_close_approaches_data(self):
     results = []
-    try:
-      response = urllib2.urlopen(self.data_url)
-      soup = BeautifulSoup(response.read())
-      rows = soup.find('table', { 'cellspacing' : '0', 'cellpadding' : '2', 'border' : '1' }).contents
-      del rows[0] # Strip the header row
-      for r in rows:
-        if hasattr(r, 'contents'):
-          ca = self.get_close_approach_from_row(r)
-          if ca != None:
-            results.append(ca)
-    except:
-      self.response.out.write('Problem parsing close approach data from %s <br /><pre>%s</pre>' % (self.data_url, self.format_exception()))
+    response = urllib2.urlopen(self.data_url)
+    soup = BeautifulSoup(response.read())
+    rows = soup.find('table', { 'cellspacing' : '0', 'cellpadding' : '2', 'border' : '1' }).contents
+    del rows[0] # Strip the header row
+    for r in rows:
+      if hasattr(r, 'contents'):
+        ca = self.get_close_approach_from_row(r)
+        if ca != None:
+          results.append(ca)
+    # Let app engine log any errors which occur, rather than handling here
     return results
 
   def get_close_approach_from_row(self, row):
